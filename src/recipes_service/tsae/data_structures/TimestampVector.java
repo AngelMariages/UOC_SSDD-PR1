@@ -38,19 +38,19 @@ import lsim.library.api.LSimLogger;
  *
  */
 public class TimestampVector implements Serializable{
-	// Only for the zip file with the correct solution of phase1.Needed for the logging system for the phase1. sgeag_2018p 
+	// Only for the zip file with the correct solution of phase1.Needed for the logging system for the phase1. sgeag_2018p
 //	private transient LSimCoordinator lsim = LSimFactory.getCoordinatorInstance();
 	// Needed for the logging system sgeag@2017
 //	private transient LSimWorker lsim = LSimFactory.getWorkerInstance();
-	
+
 	private static final long serialVersionUID = -765026247959198886L;
 	/**
 	 * This class stores a summary of the timestamps seen by a node.
 	 * For each node, stores the timestamp of the last received operation.
 	 */
-	
+
 	private ConcurrentHashMap<String, Timestamp> timestampVector= new ConcurrentHashMap<String, Timestamp>();
-	
+
 	public TimestampVector (List<String> participants){
 		// create and empty TimestampVector
 		for (Iterator<String> it = participants.iterator(); it.hasNext(); ){
@@ -61,34 +61,36 @@ public class TimestampVector implements Serializable{
 	}
 
 	/**
-	 * Updates the timestamp vector with a new timestamp. 
+	 * Updates the timestamp vector with a new timestamp.
 	 * @param timestamp
 	 */
 	public void updateTimestamp(Timestamp timestamp){
 		LSimLogger.log(Level.TRACE, "Updating the TimestampVectorInserting with the timestamp: "+timestamp);
 
+		String hostid = timestamp.getHostid();
+
+		timestampVector.put(hostid, timestamp);
 		// ...
 	}
-	
+
 	/**
 	 * merge in another vector, taking the elementwise maximum
 	 * @param tsVector (a timestamp vector)
 	 */
 	public void updateMax(TimestampVector tsVector){
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param node
 	 * @return the last timestamp issued by node that has been
 	 * received.
 	 */
 	public Timestamp getLast(String node){
-		
-		// return generated automatically. Remove it when implementing your solution 
-		return null;
+
+		return timestampVector.get(node);
 	}
-	
+
 	/**
 	 * merges local timestamp vector with tsVector timestamp vector taking
 	 * the smallest timestamp for each node.
@@ -97,22 +99,24 @@ public class TimestampVector implements Serializable{
 	 */
 	public void mergeMin(TimestampVector tsVector){
 	}
-	
+
 	/**
 	 * clone
 	 */
 	public TimestampVector clone(){
-		
-		// return generated automatically. Remove it when implementing your solution 
+
+		// return generated automatically. Remove it when implementing your solution
 		return null;
 	}
-	
+
 	/**
 	 * equals
 	 */
-	public boolean equals(Object obj){
-		
-		// return generated automatically. Remove it when implementing your solution 
+	public boolean equals(TimestampVector ts){
+
+		ts.timestampVector
+
+		// return generated automatically. Remove it when implementing your solution
 		return false;
 	}
 

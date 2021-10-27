@@ -62,6 +62,26 @@ public class Log implements Serializable{
 		}
 	}
 
+	private String getOperationHostId(Operation op) {
+		if (op == null) {
+			return null;
+		}
+
+		return op.getTimestamp().getHostid();
+	}
+
+	private boolean isOperationNewer(Operation op) {
+		if (op == null) {
+			return false;
+		}
+
+		List<Operation> allOperations = log.get(getOperationHostId(op));
+
+		Operation lastOperation = allOperations.get(allOperations.size() - 1);
+
+		return lastOperation.getTimestamp().compare(op.getTimestamp()) < 0;
+	}
+
 	/**
 	 * inserts an operation into the log. Operations are
 	 * inserted in order. If the last operation for
@@ -73,6 +93,11 @@ public class Log implements Serializable{
 	 */
 	public boolean add(Operation op){
 		// ....
+		List<Operation> allOperations = log.get(getOperationHostId(op));
+
+		if (allOperations.isEmpty() || isOperationNewer(op)) {
+			return allOperations.add(op);
+		}
 
 		// return generated automatically. Remove it when implementing your solution
 		return false;
