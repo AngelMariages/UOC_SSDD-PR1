@@ -61,6 +61,11 @@ public class Log implements Serializable {
         }
     }
 
+    /**
+     * Returns the hostId of an operation
+     * @param op - The operation from which to obtain the hostId
+     * @return - The host id or null if the operation is null.
+     */
     private String getOperationHostId(Operation op) {
         if (op == null) {
             return null;
@@ -69,6 +74,11 @@ public class Log implements Serializable {
         return op.getTimestamp().getHostid();
     }
 
+    /**
+     * Returns true if the op is newer than the last one, false otherwise
+     * @param op - The operation to compare against
+     * @return - True if newer, false if not.
+     */
     private boolean isOperationNewer(Operation op) {
         if (op == null) {
             return false;
@@ -91,14 +101,14 @@ public class Log implements Serializable {
      * @return true if op is inserted, false otherwise.
      */
     public boolean add(Operation op) {
-        // ....
         List<Operation> allOperations = log.get(getOperationHostId(op));
 
+        // no operation or the op passed in is newer than the last one
         if (allOperations.isEmpty() || isOperationNewer(op)) {
+            // we add it to the list
             return allOperations.add(op);
         }
 
-        // return generated automatically. Remove it when implementing your solution
         return false;
     }
 
@@ -133,6 +143,7 @@ public class Log implements Serializable {
      */
     @Override
     public synchronized boolean equals(Object obj) {
+        // If it's not a Log, return false
         if (!(obj instanceof Log)) {
             return false;
         }
@@ -140,17 +151,13 @@ public class Log implements Serializable {
         Log thatLog = (Log) obj;
 
         for (Map.Entry<String, List<Operation>> stringListEntry : this.log.entrySet()) {
+            // Get the pair of list for this log and the obj log.
             List<Operation> thisOperationList = stringListEntry.getValue();
             List<Operation> thatOperationList = thatLog.log.get(stringListEntry.getKey());
-
-            if (thisOperationList.size() != thatOperationList.size()) {
-                return false;
-            }
 
             return thisOperationList.equals(thatOperationList);
         }
 
-        // return generated automatically. Remove it when implementing your solution
         return false;
     }
 
@@ -160,11 +167,10 @@ public class Log implements Serializable {
     @Override
     public synchronized String toString() {
         StringBuilder name = new StringBuilder();
-        for (Enumeration<List<Operation>> en = log.elements();
-             en.hasMoreElements(); ) {
-            List<Operation> sublog = en.nextElement();
+
+        for (List<Operation> sublog : log.values()) {
             for (Operation operation : sublog) {
-                name.append(operation.toString()).append("\n");
+                name.append(operation).append("\n");
             }
         }
 

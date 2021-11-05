@@ -86,7 +86,6 @@ public class TimestampVector implements Serializable {
      * received.
      */
     public Timestamp getLast(String node) {
-
         return timestampVector.get(node);
     }
 
@@ -112,7 +111,7 @@ public class TimestampVector implements Serializable {
     /**
      * equals
      */
-    public boolean equals(TimestampVector ts) {
+    public synchronized boolean equals(TimestampVector ts) {
         if (ts == null) {
             return false;
         }
