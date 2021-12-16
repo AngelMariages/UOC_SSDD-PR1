@@ -34,7 +34,7 @@ if [ $PHASE1 = "true" ]; then
 	java -cp ../bin:../lib/* recipes_service.test.Phase1TestServer $* &
 	sleep 1
 #	java -cp ../bin:../../LSim-libraries/* recipes_service.Phase1 $*
-	java -cp ../bin:../lib/* recipes_service.Phase1 $* 
+	java -cp ../bin:../lib/* recipes_service.Phase1 $*
 else
 	# phase 2 to 4
 	if [ $LOCAL_TEST_SERVER = "true" ]; then
@@ -54,7 +54,7 @@ else
 		if [ $2 -le 4 ]; then
 			# runs each java process in a different terminal emulator window
 			#gnome-terminal -x java -cp ../bin:../lib/* recipes_service.Server $* >$FILE &
-			gnome-terminal -x java -cp ../bin:../lib/* recipes_service.Server $* &
+			ttab java -cp ../bin:../lib/* recipes_service.Server $*
 		else
 			# runs all java processes in the same terminal emulator window
 	#		java -cp ../bin:../lib/* recipes_service.Server $* >$FILE &
