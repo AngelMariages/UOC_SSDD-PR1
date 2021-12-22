@@ -20,17 +20,16 @@
 
 package recipes_service.tsae.data_structures;
 
-import lsim.library.api.LSimCoordinator;
-import lsim.library.api.LSimFactory;
 import recipes_service.data.Operation;
 
 import java.io.Serializable;
-import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 //LSim logging system imports sgeag@2017
 
@@ -63,6 +62,7 @@ public class Log implements Serializable {
 
     /**
      * Returns the hostId of an operation
+     *
      * @param op - The operation from which to obtain the hostId
      * @return - The host id or null if the operation is null.
      */
@@ -76,6 +76,7 @@ public class Log implements Serializable {
 
     /**
      * Returns true if the op is newer than the last one, false otherwise
+     *
      * @param op - The operation to compare against
      * @return - True if newer, false if not.
      */
@@ -122,9 +123,19 @@ public class Log implements Serializable {
      * @return list of operations
      */
     public List<Operation> listNewer(TimestampVector sum) {
+        List<Operation> newerOps = new ArrayList<>();
 
-        // return generated automatically. Remove it when implementing your solution
-        return null;
+        this.log.forEach((node, op) -> {
+            Timestamp last = sum.getLast(node);
+
+            List<Operation> collect = op.stream()
+                    .filter(operation -> operation.getTimestamp().compare(last) > 0)
+                    .collect(Collectors.toList());
+
+            newerOps.addAll(collect);
+        });
+
+        return newerOps;
     }
 
     /**
